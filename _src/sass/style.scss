@@ -1,0 +1,13 @@
+@import "centurion-framework";
+
+body {
+  font-family: 'helvetica neue', helvetica, arial, sans-serif;
+  font-weight: normal;
+  -webkit-font-smoothing: antialiased;
+}
+
+h1 {
+  font-weight: normal;
+}
+
+@include column-grid();
