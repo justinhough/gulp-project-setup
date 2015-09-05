@@ -1,0 +1,22 @@
+{
+  "name": "Gulp-Project-Starter",
+  "version": "0.1.0",
+  "homepage": "https://github.com/justinhough/gulp-project-setup",
+  "author": [
+    "name": "Justin Hough",
+    "email": "justin@justinhough.com"
+  ],
+  "license": "GPL",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+  ],
+  "dependencies": {
+    "jquery": "~1.11.0",
+    "modernizr": "~2.5.3",
+    "scrollmagic": "~2.0.5",
+    "lazysizes": "~1.1.3"
+  }
+}
