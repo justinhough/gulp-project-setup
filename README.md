@@ -1,2 +1,4 @@
-# gulp-project-setup
-A starter project for Gulp with some basic features
+Project starter
+====
+
+This is a starter Gulp project to make things easier to build new sites.
