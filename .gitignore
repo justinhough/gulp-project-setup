@@ -75,3 +75,5 @@ _site/
 ### Sass ###
 .sass-cache/
 *.css.map
+
+dist
