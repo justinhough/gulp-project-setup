@@ -1,59 +1,50 @@
 <!DOCTYPE html>
-<html>
+<!--[if lt IE 7]><html class="lt-ie9 lt-ie8 lt-ie7"><![endif]-->
+<!--[if IE 7]><html class="lt-ie9 lt-ie8"><![endif]-->
+<!--[if IE 8]><html class="lt-ie9"><![endif]-->
+<!--[if gt IE 8]><!--><html><!--<![endif]-->
 <head>
 
-    <title>{{ site.name }} | {{ page.title }}</title>
+  <title>{{ site.name }} | {{ page.title }}</title>
 
-    <meta charset="utf-8">
-    <link rel="canonical" href="{{ site.baseurl }}{{ page.url }}"/>
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="robots" content="index, follow" />
-    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+  <meta charset="utf-8">
+  <link rel="canonical" href="{{ site.baseurl }}{{ page.url }}"/>
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="robots" content="index, follow" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
 
-    <meta name="keywords" content="keywords_go_here" />
-    <meta name="description" content="description_goes_here" />
+  <meta name="keywords" content="keywords_go_here" />
+  <meta name="description" content="description_goes_here" />
 
-    <!--
-      Oh, good you can view source too!
+  <!--
+    Oh, good you can view source too!
 
-      The following page was proudly built and is maintained by
-       ____ ____ ____ ____ ____ ____ ____
-      ||H |||O |||T |||K |||E |||Y |||S ||
-      ||__|||__|||__|||__|||__|||__|||__||
-      |/__\|/__\|/__\|/__\|/__\|/__\|/__\|
+    The following page was proudly built and is maintained by
+     ____ ____ ____ ____ ____ ____ ____
+    ||H |||O |||T |||K |||E |||Y |||S ||
+    ||__|||__|||__|||__|||__|||__|||__||
+    |/__\|/__\|/__\|/__\|/__\|/__\|/__\|
 
-      The best part of any website are the hidden gems that lay buried
-      within, while those found here may not be easter egg worthy it's
-      great to see other developers or enthusiasts take the time to
-      admire another code.
+    The best part of any website are the hidden gems that lay buried
+    within, while those found here may not be easter egg worthy it's
+    great to see other developers or enthusiasts take the time to
+    admire another code.
 
-      Poke around the code and borrow what you like. It's all open-source here.
-    -->
+    Poke around the code and borrow what you like. It's all open-source here.
+  -->
 
-    <link href='//fonts.googleapis.com/css?family=Raleway:200,400,500,600,800|Source+Sans+Pro' rel='stylesheet' type='text/css'/>
+  <!-- styles go here and they make the site pretty -->
+  <link href="//fonts.googleapis.com/css?family=Raleway:200,400,500,600,800|Source+Sans+Pro" rel="stylesheet" type="text/css"/>
+  <link href="css/style.css" rel="stylesheet" type="text/css" />
 
 </head>
 <body>
-  
-  <!-- HEADER -->
+
   <header>
-    <div class="ctn-container">
-      <article class="ctn-grid-24">
-        <h1>{{ site.name }}</h1>
-      </article>
-    </div>
+    <h1>{{ page.title }}</h1>
   </header>
 
-  <section id="content">
-    <div class="ctn-container">
-      <article class="ctn-grid-18 ctn-tablet-8">
-        {{ content }}
-      </article>
-      <aside class="ctn-grid-6">
-        <h2>Aside</h2>
-      </aside>
-    </div>
-  </section>
+  {{ content }}
 
   <!-- FOOTER -->
   <footer id="footer" class="clearfix">
