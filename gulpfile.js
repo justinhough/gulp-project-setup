@@ -6,50 +6,54 @@ var gulp = require('gulp'),
     bump = require('gulp-bump'),
     filter = require('gulp-filter'),
     tag_version = require('gulp-tag-version'),
-    del = require('del');
+    del = require('del'),
+    header = require('gulp-header'),
+    sass = require('gulp-sass'),
+    postcss = require('gulp-postcss'),
+    autoprefixer = require('autoprefixer'),
+    mqpacker = require('css-mqpacker'),
+    csswring = require('csswring'),
+    include = require("gulp-include"),
+    uglify = require('gulp-uglify'),
+    concat = require('gulp-concat'),
+    responsive = require('gulp-responsive')
+    ;
 
+var banner = ['/**',
+  ' * <%= pkg.name %> - <%= pkg.description %>',
+  ' * @version v<%= pkg.version %>',
+  ' * @link <%= pkg.homepage %>',
+  ' * @license <%= pkg.license %>',
+  ' */',
+  ''].join('\n');
 
 // basePaths
-var path = {
-  src: 'source/',
+var paths = {
+  source: 'source/',
   dest: 'dist/',
-  centurion: './node_modules/centurion-framework/lib/sass'
-},
-paths = {
-  scripts: {
-    src: path.src + 'js/',
-    dest: path.dest + 'js/'
-  },
-  styles: {
-    src: path.src + 'sass/',
-    dest: path.dest + 'css/'
-  },
-  images: {
-    src: path.src + 'assets/',
-    dest: path.dest + 'assets/min/'
-  }
+  sassPath: './node_modules/centurion-framework/lib/sass',
+  bowerPath: './bower_components/'
 };
 
 // Clean Build Folder
 // ================================
 gulp.task('clean', function () {
-  del([ path.dest + '/**/*' ]);
-});
-
-// Connect
-// ================================
-gulp.task('connect', function() {
-  connect.server({
-    root: path.dest,
-    port: '5316',
-    livereload: true
-  });
+  del([ paths.dest + '/**/*' ]);
 });
 
 // Build Site using Jekyll
 // https://www.npmjs.com/package/gulp-jekyll-stream/
 // ================================
-gulp.task('jekyll', function() {
+gulp.task('serve', function() {
+
+  // connect to localhost
+  connect.server({
+    root: paths.dest,
+    port: '5316',
+    livereload: true
+  });
+
+  // generate jekyll site
   return gulp.src(process.cwd())
     .pipe(jekyll({
       bundleExec: true,
@@ -58,8 +62,8 @@ gulp.task('jekyll', function() {
       cwd: process.cwd(),
       layouts: '_layouts',
       plugins: '_plugins',
-      source: path.src,
-      destination: path.dest
+      source: paths.source,
+      destination: paths.dest
     }));
 });
 
@@ -79,7 +83,6 @@ gulp.task('jekyll', function() {
  * To bump the version numbers accordingly after you did a patch,
  * introduced a feature or made a backwards-incompatible release.
  */
-
 function inc(importance) {
     // get all the files to bump version in
     return gulp.src(['./package.json', './bower.json'])
@@ -91,20 +94,111 @@ function inc(importance) {
         //.pipe(tag_version());
 };
 
+// STYLES
+// ================================
+// SASS
+gulp.task('sass', function () {
+  gulp.src( paths.source + 'sass/**/*.scss' )
+    //.pipe(sourcemaps.init())
+    .pipe(sass({
+        includePaths: paths.sassPath,
+        errLogToConsole: true
+    }))
+    //.pipe(sourcemaps.write('./'))
+    .pipe(gulp.dest( paths.dest + 'css/' ));
+});
+// POSTCSS
+gulp.task('postcss', function () {
+  var processors = [
+    autoprefixer({browsers: ['last 2 version']}),
+    mqpacker,
+    csswring
+  ];
+  return gulp.src(  paths.dest + 'css/**/*.css' )
+    .pipe(postcss(processors))
+    .pipe(header(banner, { pkg : pkg } )) // add header to files
+    .pipe(gulp.dest( paths.dest + 'css/' ));
+});
+// WATCH for STYLES
+gulp.task('styles:watch', function () {
+  gulp.watch(paths.source + 'sass/**/*.scss', ['sass']);
+  gulp.watch(paths.dest + 'css/**/*.css', ['postcss']);
+});
+
+// SCRIPTS
+// ================================
+// CONCAT
+gulp.task('concat', function() {
+  console.log("-- gulp is running task 'scripts'");
+
+  gulp.src( paths.source + '**/*.js' )
+    .pipe(include())
+      .on('error', console.log)
+    .pipe(concat('all.js'))
+    .pipe(uglify())
+    .pipe(header(banner, { pkg : pkg } )) // add header to files
+    .pipe(gulp.dest( paths.dest + 'js' ));
+});
+// WATCH for SCRIPTS
+gulp.task('scripts:watch', function () {
+  gulp.watch(paths.source + '**/*.js', ['concat']);
+});
+
+// IMAGES
+// ================================
+// IMAGEMIN
+// gulp.task('imagemin', function () {
+//   return gulp.src('assets/**/*')
+//     .pipe(imagemin({
+//       progressive: true,
+//       svgoPlugins: [{removeViewBox: false}],
+//       use: [pngquant(), imageminJpegtran()]
+//     }))
+//     .pipe(gulp.dest(paths.dest + '/assets'));
+// });
+
+// RESPONSIVE IMAGES
+gulp.task('responsive_images', function () {
+  return gulp.src('assets/**/*.{jpg,png}')
+    .pipe(responsive([
+      {
+        name: 'img/test-*',
+        width: 200,
+        rename: {
+          suffix: '-200'
+        },
+        strictMatchImages: false
+      }
+    ]))
+    .pipe(gulp.dest('dist/assets'));
+});
 
 
+// WATCH for IMAGES
+gulp.task('images:watch', function () {
+  gulp.watch(paths.source + 'assets/**/*', ['imagemin']);
+});
 
 
 
 
 // TASKS
 // ================================
-gulp.task('default', [ 'clean', 'jekyll', 'connect' ]);
+gulp.task('watch', [ 'styles:watch', 'scripts:watch', 'images:watch' ]);
+gulp.task('styles', [ 'sass', 'postcss' ]);
+gulp.task('scripts', [ 'concat' ]);
+gulp.task('images', [ 'responsive_images' ]);
 
 // bump versions
 gulp.task('patch', function() { return inc('patch'); })
 gulp.task('feature', function() { return inc('minor'); })
 gulp.task('release', function() { return inc('major'); })
+
+
+gulp.task('default', [ 'clean', 'styles', 'scripts', 'serve', 'watch' ]);
+
+
+
 
 // Things to Do:
 // ===================================
@@ -112,30 +206,30 @@ gulp.task('release', function() { return inc('major'); })
 // @TODO: [x] connect (server)
 // @TODO: [x] jekyll
 
-// @TODO: [] bump verion number
+// @TODO: [x] bump verion number
 
-// @TODO: [] sass
-// @TODO: [] include Centurion framework at core for usage
-// @TODO: [] uncss
-// @TODO: [] postcss
-// @TODO: [] critical (create a critical CSS file)
-// @TODO: [] add header to CSS files
+// @TODO: [x] sass
+// @TODO: [x] include Centurion framework at core for usage
+// @TODO: [x] postcss
+// @TODO: [x] add header to CSS files
 
-// @TODO: [] uglify
-// @TODO: [] concat
-// @TODO: [] add header to JS files
+// @TODO: [x] uglify
+// @TODO: [x] concat
+// @TODO: [x] add header to JS files
 
-// @TODO: [] imagemin
+// @TODO: [x] imagemin
 // @TODO: [] svgmin
 // @TODO: [] responsive_images
 
-// @TODO: [] HTML inject CSS and JS into templates
-
 // @TODO: [] copy any other files
 
-// @TODO: [] watch for changed files and run necessary processes
-// @TODO: [] Livereload
+// @TODO: [x] watch for changed files and run necessary processes
+// @TODO: [] livereload
 
 // @TODO: [] CHANGELOG generate
 // @TODO: [] gh-pages deploy
 // @TODO: [] create ZIP file of version
+
+// HOLDING FOR ACTUAL PROJECTS
+// @TODO: [] uncss
+// @TODO: [] critical (create a critical CSS file)
