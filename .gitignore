@@ -59,12 +59,8 @@ build/Release
 node_modules
 
 
-### grunt ###
-# Grunt usually compiles files inside this directory
+### Gulp ###
 dist/
-
-# Grunt usually preprocesses files such as coffeescript, compass... inside the .tmp directory
-.tmp/
 
 
 ### Bower ###
