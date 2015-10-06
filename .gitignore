@@ -1,4 +1,4 @@
-# Created by https://www.gitignore.io/api/osx,node,bower,jekyll,sass
+# Created by https://www.gitignore.io/api/osx,node,grunt,bower,jekyll,sass
 
 ### OSX ###
 .DS_Store
@@ -59,6 +59,14 @@ build/Release
 node_modules
 
 
+### grunt ###
+# Grunt usually compiles files inside this directory
+dist/
+
+# Grunt usually preprocesses files such as coffeescript, compass... inside the .tmp directory
+.tmp/
+
+
 ### Bower ###
 bower_components
 .bower-cache
@@ -75,5 +83,3 @@ _site/
 ### Sass ###
 .sass-cache/
 *.css.map
-
-dist
