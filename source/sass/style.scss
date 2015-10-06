@@ -1,0 +1,21 @@
+@import "centurion-framework";
+
+header {
+  background-color: hotpink;
+  box-sizing: border-box;
+  display: flex;
+  h1 {
+    color: #FFF;
+  }
+}
+
+h1 {
+  padding: 20px;
+}
+h2 {
+  font-size: 18px;
+}
+
+//@include normalize();
+//@include column-grid();
+//@include flex-grid();
