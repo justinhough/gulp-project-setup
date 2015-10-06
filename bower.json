@@ -7,7 +7,6 @@
     "email": "justin@justinhough.com"
   ],
   "license": "GPL",
-  "private": true,
   "ignore": [
     "**/.*",
     "node_modules",
