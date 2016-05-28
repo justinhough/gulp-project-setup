@@ -1,10 +1,9 @@
 {
   "name": "Gulp-Project-Starter",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "homepage": "https://github.com/justinhough/gulp-project-setup",
-  "author": [
-    "name": "Justin Hough",
-    "email": "justin@justinhough.com"
+  "authors": [
+    "Justin Hough <justin@justinhough.com>"
   ],
   "license": "GPL",
   "ignore": [
