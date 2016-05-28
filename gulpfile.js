@@ -1,7 +1,8 @@
 var gulp = require('gulp'),
     pkg = require('./package.json'),
-    jekyll = require('gulp-jekyll-stream'),
+    fileinclude = require('gulp-file-include'),
     connect = require('gulp-connect'),
+    livereload = require('gulp-livereload')
     git = require('gulp-git'),
     bump = require('gulp-bump'),
     filter = require('gulp-filter'),
@@ -15,8 +16,7 @@ var gulp = require('gulp'),
     csswring = require('csswring'),
     include = require("gulp-include"),
     uglify = require('gulp-uglify'),
-    concat = require('gulp-concat'),
-    responsive = require('gulp-responsive')
+    concat = require('gulp-concat')
     ;
 
 var banner = ['/**',
@@ -41,8 +41,7 @@ gulp.task('clean', function () {
   del([ paths.dest + '/**/*' ]);
 });
 
-// Build Site using Jekyll
-// https://www.npmjs.com/package/gulp-jekyll-stream/
+// Build Site
 // ================================
 gulp.task('serve', function() {
 
@@ -52,19 +51,21 @@ gulp.task('serve', function() {
     port: '5316',
     livereload: true
   });
+  
+});
 
-  // generate jekyll site
-  return gulp.src(process.cwd())
-    .pipe(jekyll({
-      bundleExec: true,
-      quiet: true,
-      safe: false,
-      cwd: process.cwd(),
-      layouts: '_layouts',
-      plugins: '_plugins',
-      source: paths.source,
-      destination: paths.dest
-    }));
+gulp.task('fileinclude', function() {
+  gulp.src([ paths.source + '**/*.html' ])
+    .pipe(fileinclude({
+      prefix: '@@',
+      basepath: '@file'
+    }))
+    .pipe(livereload())
+    .pipe(gulp.dest('./dist/'));
+});
+gulp.task('html:watch', function () {
+  livereload.listen();
+  gulp.watch(paths.source + '**/*.html', ['fileinclude']);
 });
 
 // BUMP_VERSION
@@ -98,14 +99,14 @@ function inc(importance) {
 // ================================
 // SASS
 gulp.task('sass', function () {
-  gulp.src( paths.source + 'sass/**/*.scss' )
+  gulp.src( paths.source + 'assets/sass/**/*.scss' )
     //.pipe(sourcemaps.init())
     .pipe(sass({
         includePaths: paths.sassPath,
         errLogToConsole: true
     }))
     //.pipe(sourcemaps.write('./'))
-    .pipe(gulp.dest( paths.dest + 'css/' ));
+    .pipe(gulp.dest( paths.dest + 'assets/css/' ));
 });
 // POSTCSS
 gulp.task('postcss', function () {
@@ -114,15 +115,17 @@ gulp.task('postcss', function () {
     mqpacker,
     csswring
   ];
-  return gulp.src(  paths.dest + 'css/**/*.css' )
+  return gulp.src(  paths.dest + 'assets/css/**/*.css' )
     .pipe(postcss(processors))
     .pipe(header(banner, { pkg : pkg } )) // add header to files
-    .pipe(gulp.dest( paths.dest + 'css/' ));
+    .pipe(gulp.dest( paths.dest + 'assets/css/' ))
+    .pipe(livereload());
 });
 // WATCH for STYLES
 gulp.task('styles:watch', function () {
-  gulp.watch(paths.source + 'sass/**/*.scss', ['sass']);
-  gulp.watch(paths.dest + 'css/**/*.css', ['postcss']);
+  livereload.listen();
+  gulp.watch(paths.source + 'assets/sass/**/*.scss', ['sass']);
+  gulp.watch(paths.dest + 'assets/css/**/*.css', ['postcss']);
 });
 
 // SCRIPTS
@@ -131,63 +134,28 @@ gulp.task('styles:watch', function () {
 gulp.task('concat', function() {
   console.log("-- gulp is running task 'scripts'");
 
-  gulp.src( paths.source + '**/*.js' )
+  gulp.src( paths.source + 'assets/**/*.js' )
     .pipe(include())
       .on('error', console.log)
     .pipe(concat('all.js'))
     .pipe(uglify())
     .pipe(header(banner, { pkg : pkg } )) // add header to files
-    .pipe(gulp.dest( paths.dest + 'js' ));
+    .pipe(gulp.dest( paths.dest + 'assets/js' ))
+    .pipe(livereload());
 });
 // WATCH for SCRIPTS
 gulp.task('scripts:watch', function () {
-  gulp.watch(paths.source + '**/*.js', ['concat']);
+  livereload.listen();
+  gulp.watch(paths.source + 'assets/**/*.js', ['concat']);
 });
-
-// IMAGES
-// ================================
-// IMAGEMIN
-// gulp.task('imagemin', function () {
-//   return gulp.src('assets/**/*')
-//     .pipe(imagemin({
-//       progressive: true,
-//       svgoPlugins: [{removeViewBox: false}],
-//       use: [pngquant(), imageminJpegtran()]
-//     }))
-//     .pipe(gulp.dest(paths.dest + '/assets'));
-// });
-
-// RESPONSIVE IMAGES
-gulp.task('responsive_images', function () {
-  return gulp.src('assets/**/*.{jpg,png}')
-    .pipe(responsive([
-      {
-        name: 'img/test-*',
-        width: 200,
-        rename: {
-          suffix: '-200'
-        },
-        strictMatchImages: false
-      }
-    ]))
-    .pipe(gulp.dest('dist/assets'));
-});
-
-
-// WATCH for IMAGES
-gulp.task('images:watch', function () {
-  gulp.watch(paths.source + 'assets/**/*', ['imagemin']);
-});
-
-
 
 
 // TASKS
 // ================================
-gulp.task('watch', [ 'styles:watch', 'scripts:watch', 'images:watch' ]);
+gulp.task('watch', [ 'styles:watch', 'scripts:watch', 'html:watch' ]); //, 'images:watch'
 gulp.task('styles', [ 'sass', 'postcss' ]);
 gulp.task('scripts', [ 'concat' ]);
-gulp.task('images', [ 'responsive_images' ]);
+// gulp.task('images', [ 'responsive_images' ]);
 
 // bump versions
 gulp.task('patch', function() { return inc('patch'); })
@@ -195,41 +163,5 @@ gulp.task('feature', function() { return inc('minor'); })
 gulp.task('release', function() { return inc('major'); })
 
 
-gulp.task('default', [ 'clean', 'styles', 'scripts', 'serve', 'watch' ]);
+gulp.task('default', [ 'clean', 'fileinclude', 'styles', 'scripts', 'serve', 'watch' ]);
 
-
-
-
-// Things to Do:
-// ===================================
-// @TODO: [x] clean
-// @TODO: [x] connect (server)
-// @TODO: [x] jekyll
-
-// @TODO: [x] bump verion number
-
-// @TODO: [x] sass
-// @TODO: [x] include Centurion framework at core for usage
-// @TODO: [x] postcss
-// @TODO: [x] add header to CSS files
-
-// @TODO: [x] uglify
-// @TODO: [x] concat
-// @TODO: [x] add header to JS files
-
-// @TODO: [x] imagemin
-// @TODO: [] svgmin
-// @TODO: [] responsive_images
-
-// @TODO: [] copy any other files
-
-// @TODO: [x] watch for changed files and run necessary processes
-// @TODO: [] livereload
-
-// @TODO: [] CHANGELOG generate
-// @TODO: [] gh-pages deploy
-// @TODO: [] create ZIP file of version
-
-// HOLDING FOR ACTUAL PROJECTS
-// @TODO: [] uncss
-// @TODO: [] critical (create a critical CSS file)
