@@ -1,6 +1,6 @@
 {
   "name": "Gulp-Project-Setup",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "A project starter with NPM, Grunt, and Bower pre-configured.",
   "main": "gulpfile.js",
   "scripts": {
@@ -16,10 +16,9 @@
     "bower",
     "starter"
   ],
-  "author": {
-    "name": "Justin Hough",
-    "email": "justin@justinhough.com"
-  },
+  "authors": [
+    "Justin Hough <justin@justinhough.com>"
+  ],
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/justinhough/gulp-project-setup"
