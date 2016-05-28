@@ -61,20 +61,13 @@ node_modules
 
 ### Gulp ###
 dist/
-
+.publish
 
 ### Bower ###
 bower_components
 .bower-cache
 .bower-registry
 .bower-tmp
-
-
-### Jekyll ###
-_site/
-.sass-cache/
-.jekyll-metadata
-
 
 ### Sass ###
 .sass-cache/
