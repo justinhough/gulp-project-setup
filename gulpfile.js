@@ -165,39 +165,3 @@ gulp.task('release', function() { return inc('major'); })
 
 gulp.task('default', [ 'clean', 'fileinclude', 'styles', 'scripts', 'serve', 'watch' ]);
 
-
-
-
-// Things to Do:
-// ===================================
-// @TODO: [x] clean
-// @TODO: [x] connect (server)
-// @TODO: [x] file include
-
-// @TODO: [x] bump verion number
-
-// @TODO: [x] sass
-// @TODO: [x] include Centurion framework at core for usage
-// @TODO: [x] postcss
-// @TODO: [x] add header to CSS files
-
-// @TODO: [x] uglify
-// @TODO: [x] concat
-// @TODO: [x] add header to JS files
-
-// @TODO: [] imagemin
-// @TODO: [] svgmin
-// @TODO: [] responsive_images
-
-// @TODO: [] copy any other files
-
-// @TODO: [x] watch for changed files and run necessary processes
-// @TODO: [] livereload
-
-// @TODO: [] CHANGELOG generate
-// @TODO: [] gh-pages deploy
-// @TODO: [] create ZIP file of version
-
-// HOLDING FOR ACTUAL PROJECTS
-// @TODO: [] uncss
-// @TODO: [] critical (create a critical CSS file)
