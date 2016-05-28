@@ -16,6 +16,7 @@ h2 {
   font-size: 18px;
 }
 
-//@include normalize();
-//@include column-grid();
-//@include flex-grid();
+
+@include normalize();
+// @include column-grid();
+@include flex-grid();
