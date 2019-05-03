@@ -1,26 +1,22 @@
-Gulp Project Setup
+Gulp 4.x Project Setup
 ====
 
-This is a starter Gulp project to make things easier to build new sites.
+This is a starter Gulp 4.x project to make things easier to build new sites.
 
 ### Get started
 
-1. `bower install` (installs libraries used in `scripts.js`)
-2. `npm install` or `npm i`
-3. `gulp`
-4. Make something awesome for the web.
+1. `npm install` or `npm i`
+2. `gulp`
+3. Make something awesome for the web.
 
 
 ### Todo
 
-- [ ] fix clean issue on `gulp` start. (can run manually before a rebuild)
-- [ ] Add image optimization back and document Sharp library dependency issue.
-- [ ] imagemin
-- [ ] svgmin
-- [ ] responsive_images
-- [ ] livereload
+- [x] Upgrade to Gulp 4
+- [x] Update BrowserSync
+- [x] Use Tailwind CSS
+- [ ] PostCSS update
 - [ ] CHANGELOG generate
-- [x] gh-pages deploy
-- [ ] uncss
-- [ ] critical (create a critical CSS file)
-- [ ] add assemble back for final build with templates
+- [ ] Twig template organization for theming
+- [ ] Documentation needed
+- [ ] Image optimizations for project specific images
