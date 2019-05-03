@@ -1,0 +1,14 @@
+{% extends "layouts/default.html" %}
+{% set title = "Test" %}
+{% set pageTitle = "Test Page" %}
+{% set benefits = ["Fast!", "Easy!", "Efficient!"] %}
+
+{% block content %}
+<h2 class="mb-2">{{ pageTitle }}</h2>
+
+<ul>
+  {%- for value in benefits -%}
+    <li>{{ value }}</li>
+  {%- endfor -%}
+</ul>
+{% endblock %}
