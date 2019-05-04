@@ -15,7 +15,7 @@ const hub = new HubRegistry(['./gulp/tasks/*.js']);
 registry(hub);
 
 // Define Watcher
-const watcher = () => watch(paths.src.css, series('styles', 'reload'));
+const watcher = () => watch([paths.src.css, paths.src.templates], series('styles', 'templates', 'reload'));
 
 // Define Combined Tasks
 const build = series(clean, 'styles', 'templates', 'serve', watcher);

@@ -28,14 +28,14 @@
   },
   "paths": {
     "src": {
-      "css": "./src/assets/css/"
+      "css": "./src/assets/css/",
+      "js": "./src/assets/js/",
+      "templates": "./src/templates/"
     },
     "dist": {
       "base": "./dist/",
-      "css": "./dist/css/"
-    },
-    "html": {
-      "templates": "./src/templates/"
+      "css": "./dist/css/",
+      "js": "./dist/js/"
     },
     "config": {
       "tailwind": "./tailwind.js"
@@ -46,7 +46,9 @@
     "browser-sync": "^2.26.5",
     "del": "^4.1.1",
     "fancy-log": "^1.3.3",
+    "front-matter": "^3.0.2",
     "gulp": "^4.0.1",
+    "gulp-data": "^1.3.1",
     "gulp-hub": "^4.2.0",
     "gulp-postcss": "^8.0.0",
     "gulp-twig": "^1.2.0",

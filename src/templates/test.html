@@ -1,14 +1,22 @@
+---
+title: Testing the Page Title
+pageTitle: Test Page
+bannerImage: 'https://www.justinhough.com/assets/images/banners/home-banner-bkg-3.jpg'
+benefits: 
+  - Custom!
+  - Easy!
+  - Efficient!
+---
+
 {% extends "layouts/default.html" %}
-{% set title = "Test" %}
-{% set pageTitle = "Test Page" %}
-{% set benefits = ["Fast!", "Easy!", "Efficient!"] %}
 
 {% block content %}
-<h2 class="mb-2">{{ pageTitle }}</h2>
 
+<h2 class="mb-2">{{ title }}</h2>
 <ul>
   {%- for value in benefits -%}
     <li>{{ value }}</li>
   {%- endfor -%}
 </ul>
+
 {% endblock %}
